@@ -1,19 +1,32 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react'
+import { createSwitchNavigator,createAppContainer } from 'react-navigation'
+import Auth from './screens/auth'
+import Home from './screens/home'
+import Loading from './screens/loading'
+import { firebaseConfig } from './config'
+import firebase from 'firebase'
+import store from './redux/store'
+import {Provider} from 'react-redux'
+firebase.initializeApp(firebaseConfig)
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-    </View>
-  );
+const switchNavigator = createSwitchNavigator({
+  loading: Loading,
+  login: Auth,
+  home: Home
+})
+
+const Appcontainer = createAppContainer(switchNavigator)
+
+
+class App extends React.Component {
+  render(){
+    return(
+      <Provider store={store}>
+        <Appcontainer /> 
+      </Provider>
+    )
+  }
+  
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App
